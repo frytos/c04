@@ -39,12 +39,10 @@ int	ft_atoi(char *str)
 	unsigned_long = 0;
 	ptr_unsigned_long = &unsigned_long;
 	if (ft_if_numeric_which(&str[index]))
-	{
 		ft_add_significand(ptr_unsigned_long, &str[index]);
-		return ((int)sign * unsigned_long);
-	}
 	else
 		return (0);
+	return ((int)sign * unsigned_long);
 }
 
 int	ft_char_is_white_space(char *str)
