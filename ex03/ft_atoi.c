@@ -28,23 +28,23 @@ int	ft_atoi(char *str)
 	long	signed_long;
 
 	index = 0;
-	sign = 1;
-	unsigned_long = 0;
-	ptr_unsigned_long = &unsigned_long;
 	while (ft_char_is_white_space(&str[index]))
 		index++;
+	sign = 1;
 	while (ft_if_sign_which(&str[index]))
 	{
 		sign *= ft_if_sign_which(&str[index]);
 		index++;
 	}
+	unsigned_long = 0;
+	ptr_unsigned_long = &unsigned_long;
 	if (ft_if_numeric_which(&str[index]))
+	{
 		ft_add_significand(ptr_unsigned_long, &str[index]);
-	signed_long = sign * unsigned_long;
-	if (signed_long < INT_MIN || signed_long > INT_MAX)
-		return (0);
+		return ((int)sign * unsigned_long);
+	}
 	else
-		return ((int)signed_long);
+		return (0);
 }
 
 int	ft_char_is_white_space(char *str)
