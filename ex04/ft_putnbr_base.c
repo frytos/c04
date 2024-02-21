@@ -46,9 +46,7 @@ void	get_and_print_significand(long long_nbr, int base_number, char *base)
 		ft_putchar(convert_in_base(long_nbr % base_number, base));
 	}
 	else
-	{
 		ft_putchar(convert_in_base(long_nbr % base_number, base));
-	}
 }
 
 char	convert_in_base(int significand, char *base)

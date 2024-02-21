@@ -14,7 +14,6 @@
 #include <stdio.h>
 
 void	ft_putstr(char *str);
-void	ft_putchar(char c);
 
 void	ft_putstr(char *str)
 {
@@ -23,14 +22,9 @@ void	ft_putstr(char *str)
 	index = 0;
 	while (str[index] != 0)
 	{
-		ft_putchar(str[index]);
+		write(1, &str[index], 1);
 		index++;
 	}
-}
-
-void	ft_putchar(char c)
-{
-	write(1, &c, 1);
 }
 
 // int	main(void)

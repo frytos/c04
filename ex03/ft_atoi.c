@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include <limits.h>
+#include <stdlib.h>
 
 int	ft_atoi(char *str);
 int	ft_char_is_white_space(char *str);
@@ -25,7 +26,6 @@ int	ft_atoi(char *str)
 	int		sign;
 	long	unsigned_long;
 	long	*ptr_unsigned_long;
-	long	signed_long;
 
 	index = 0;
 	while (ft_char_is_white_space(&str[index]))
@@ -109,15 +109,15 @@ int	ft_add_significand(long *ptr_unsigned_long, char *str)
 // 	char s8[] = "    \n \f \r \t \v   --+-2147483648"; // INT_MIN -2147483648
 // 	char s9[] = "    \n \f \r \t \v   --+--2147483648"; // INT_MAX+1 0
 // 	char s10[] = "    \n \f \r \t \v   --+-2147483649"; // INT_MIN-1 0
-// 	printf("s1 = %d\n", ft_atoi(s1));
-// 	printf("s2 = %d\n", ft_atoi(s2));
-// 	printf("s3 = %d\n", ft_atoi(s3));
-// 	printf("s4 = %d\n", ft_atoi(s4));
-// 	printf("s5 = %d\n", ft_atoi(s5));
-// 	printf("s6 = %d\n", ft_atoi(s6));
-// 	printf("s7 = %d\n", ft_atoi(s7));
-// 	printf("s8 = %d\n", ft_atoi(s8));
-// 	printf("s9 = %d\n", ft_atoi(s9));
-// 	printf("s10 = %d\n", ft_atoi(s10));
+// 	printf("s1 = %d - %d\n", ft_atoi(s1), atoi(s1));
+// 	printf("s2 = %d - %d\n", ft_atoi(s2), atoi(s2));
+// 	printf("s3 = %d - %d\n", ft_atoi(s3), atoi(s3));
+// 	printf("s4 = %d - %d\n", ft_atoi(s4), atoi(s4));
+// 	printf("s5 = %d - %d\n", ft_atoi(s5), atoi(s5));
+// 	printf("s6 = %d - %d\n", ft_atoi(s6), atoi(s6));
+// 	printf("s7 = %d - %d\n", ft_atoi(s7), atoi(s7));
+// 	printf("s8 = %d - %d\n", ft_atoi(s8), atoi(s8));
+// 	printf("s9 = %d - %d\n", ft_atoi(s9), atoi(s9));
+// 	printf("s10 = %d - %d\n", ft_atoi(s10), atoi(s10));
 // 	return (0);
 // }

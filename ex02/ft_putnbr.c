@@ -47,9 +47,7 @@ void	ft_putnbr(int nb)
 void	*recursive_print(int nb, char *nb_char, int index)
 {
 	if (nb > 9)
-	{
 		recursive_print(nb / 10, nb_char, index + 1);
-	}
 	nb_char[index] = (nb % 10 + '0');
 }
 
