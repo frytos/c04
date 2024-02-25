@@ -13,59 +13,34 @@
 #include <unistd.h>
 
 void	ft_putnbr(int nb);
-void	*recursive_print(int nb, char *nb_char, int index);
-void	reverse_print(char *nb_char);
+void	recursive_print(int nb);
 void	ft_putchar(char digit);
 
 void	ft_putnbr(int nb)
 {
-	char	nb_char[12];
-	int		index;
-
-	index = 0;
-	while (index < 12)
-	{
-		nb_char[index] = 0;
-		index++;
-	}
 	if (nb == -2147483648)
 	{
-		ft_putchar('-');
-		ft_putchar('2');
-		nb = 147483648;
+		write(1, "-2147483648", 11);
+		return ;
 	}
 	else if (nb < 0)
 	{
 		ft_putchar('-');
 		nb = -nb;
 	}
-	index = 0;
-	recursive_print(nb, nb_char, index);
-	reverse_print(nb_char);
+	recursive_print(nb);
 }
 
-void	*recursive_print(int nb, char *nb_char, int index)
+void	recursive_print(int nb)
 {
 	if (nb > 9)
-		recursive_print(nb / 10, nb_char, index + 1);
-	nb_char[index] = (nb % 10 + '0');
+		recursive_print(nb / 10);
+	ft_putchar(nb % 10 + '0');
 }
 
-void	reverse_print(char *nb_char)
+void	ft_putchar(char c)
 {
-	int	index;
-
-	index = 11;
-	while (index >= 0)
-	{
-		ft_putchar(nb_char[index]);
-		index--;
-	}
-}
-
-void	ft_putchar(char digit)
-{
-	write(1, &digit, 1);
+	write(1, &c, 1);
 }
 
 // int	main(void)
