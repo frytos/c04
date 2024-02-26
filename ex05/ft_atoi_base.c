@@ -12,186 +12,169 @@
 
 #include <stdio.h>
 #include <limits.h>
+#include <stdlib.h>
 
+int		strpos(char *base, char c);
+int		check_base_get_size(char *base);
+int		ft_add_significand(char *str, int n, int len_base, char *base);
 int		ft_atoi_base(char *str, char *base);
-int		check_n_size(char *base);
-int		ft_if_char_in_base_which(char *str, char *base, int base_nb);
-long	ft_add_coeff(char *str, char *base, int base_nb, long *ptr_u_long);
 
 int	ft_atoi_base(char *str, char *base)
 {
-	int		index;
-	int		sign;
-	long	u_long;
-	long	*ptr_u_long;
+	int	index;
+	int	sign;
+	int	n;
+	int	len_base;
 
-	if (check_n_size(base) <= 1)
-		return (0);
 	index = 0;
-	while (str[index] == 32 || (str[index] >= 9 && str[index] <= 13))
-		index++;
 	sign = 1;
-	while (str[index] == 45 || str[index] == 43)
+	n = 0;
+	len_base = check_base_get_size(base);
+	if (len_base < 2)
+		return (0);
+	while ((9 <= str[index] && str[index] <= 13) || str[index] == 32)
+		index++;
+	while (str[index] == '-' || str[index] == '+')
 	{
-		sign *= 44 - str[index];
+		if (str[index] == '-')
+			sign *= -1;
 		index++;
 	}
-	u_long = 0;
-	ptr_u_long = &u_long;
-	if (ft_if_char_in_base_which(&str[index], base, check_n_size(base)) < 0)
-		return (0);
-	ft_add_coeff(&str[index], base, check_n_size(base), ptr_u_long);
-	return ((int)(sign * u_long));
+	n = ft_add_significand(&str[index], n, len_base, base);
+	return (sign * n);
 }
 
-long	ft_add_coeff(char *str, char *base, int base_nb, long *ptr_u_long)
+int	strpos(char *base, char c)
 {
-	int		rank;
-	int		index_rank;
-	long	to_add;
+	int	pos;
 
-	if (ft_if_char_in_base_which(&str[1], base, base_nb) >= 0)
+	pos = 0;
+	while (base[pos])
 	{
-		rank = ft_add_coeff(&str[1], base, base_nb, ptr_u_long);
-		index_rank = rank;
-		to_add = ft_if_char_in_base_which(&str[0], base, base_nb);
-		while (index_rank >= 0)
-		{
-			to_add *= base_nb;
-			index_rank--;
-		}
-		*ptr_u_long += to_add;
-		return (rank + 1);
-	}
-	else
-	{
-		*ptr_u_long += ft_if_char_in_base_which(&str[0], base, base_nb);
-		return (0);
-	}
-}
-
-int	ft_if_char_in_base_which(char *str, char *base, int base_nb)
-{
-	int	base_index;
-
-	base_index = 0;
-	while (base_index < base_nb)
-	{
-		if (str[0] == base[base_index])
-			return (base_index);
-		else
-			base_index++;
+		if (base[pos] == c)
+			return (pos);
+		pos++;
 	}
 	return (-1);
 }
 
-int	check_n_size(char *str)
+int	ft_add_significand(char *str, int n, int len_base, char *base)
 {
-	int	len;
+	int	base_value;
+
+	base_value = strpos(base, str[0]);
+	if ((0 <= base_value && base_value <= len_base - 1) && str[0])
+	{
+		n = n * len_base + base_value;
+		n = ft_add_significand(&str[1], n, len_base, base);
+		return (n);
+	}
+	else
+		return (n);
+}
+
+int	check_base_get_size(char *base)
+{
+	int	len_base;
 	int	search_index;
 
-	len = 0;
-	while (str[len] != 0)
+	len_base = 0;
+	while (base[len_base])
 	{
-		if (str[len] == 43 || str[len] == 45)
-			return (-3);
-		if (str[0] == 32 || (str[0] >= 9 && str[0] <= 13))
-			return (-4);
+		if (base[len_base] == '+' || base[len_base] == '-')
+			return (0);
+		if ((9 <= base[len_base] && base[len_base] <= 13)
+			|| base[len_base] == 32)
+			return (0);
 		search_index = 1;
-		while (str[len + search_index] != 0)
+		while (base[len_base + search_index])
 		{
-			if (str[len] == str[len + search_index])
-				return (-2);
+			if (base[len_base] == base[len_base + search_index])
+				return (0);
 			search_index++;
 		}
-		len++;
+		len_base++;
 	}
-	if (len > 1)
-		return (len);
-	else
-		return (-1);
+	return (len_base);
 }
 
 // int	main(void)
 // {
-// // Test bases
+
+// //	Test bases
 // 	char empty[] = "";
-// 	char single[] = "a";
+// 	char single[] = "b";
 // 	char duplicate[] = "abcda";
 // 	char symbols[] = "ab+c";
-// 	char white_space[] = "abc de";
-// 	char base2ab[] = "ab";
-// 	char base26[] = "abcdefghijklmnopqrstuvwxyz";
-// 	char base5[] = "abcdr";
-// 	char base36[] = "0123456789abcdefghijklmnopqrstuvwxyz";
-// 	char base_inv[] = "9876543210";
-// 	char base2[] = "XY";
+// 	char base2ab[] = "abc";
 // 	char base10[] = "0123456789";
+// 	char base2[] = "XY";
 
-// 	char b[] = "b"; 
+// 	char b[] = "bc"; 
 
 // 	printf("b in empty = %d\n", ft_atoi_base(b, empty));
 // 	printf("b in single = %d\n", ft_atoi_base(b, single));
 // 	printf("b in duplicate = %d\n", ft_atoi_base(b, duplicate));
 // 	printf("b in symbols = %d\n", ft_atoi_base(b, symbols));
-// 	printf("b in white_space = %d\n", ft_atoi_base(b, white_space));
 // 	printf("b in base2ab = %d\n", ft_atoi_base(b, base2ab));
 
-// // Test whitespaces and +-
-// 	char c1[] = "bdc";
-// 	char c2[] = "  --++--+-ddd";
-// 	char c3[] = "\n \f \r \t \v  --+- +--+-00092as5465as";
+// // 	Test whitespaces and +-
+// 	char base5[] = "abcde";
+// 	char school1[] = "bdc";
+// 	char school2[] = "  --++--+-ddd";
 
-// 	printf("c1 = %d\n", ft_atoi_base(c1, base5));
-// 	printf("c2 = %d\n", ft_atoi_base(c2, base5));
-// 	printf("c3 = %d\n", ft_atoi_base(c3, base5));
+// 	printf("school1 = %d\n", ft_atoi_base(school1, base5));
+// 	printf("school2 = %d\n", ft_atoi_base(school2, base5));
 
-// 	char i1[] = "0"; 
-// 	char i2[] = "5"; 
-// 	char i3[] = "-21";
-// 	char i4[] = "123";
-// 	char i5[] = "-98765";
-// 	char i6[] = "    \n \f \r \t \v   --+--2147483647"; // INT_MAX 2147483647
-// 	char i7[] = "    \n \f \r \t \v   --+-2147483648"; // INT_MIN -2147483648
-// 	char i8[] = "    \n \f \r \t \v   --+--2147483648"; // INT_MAX+1 0
-// 	char i9[] = "    \n \f \r \t \v   --+-2147483649"; // INT_MIN-1 0
+// 	char s1[] = "0"; 
+// 	char s2[] = "5"; 
+// 	char s3[] = "-21";
+// 	char s4[] = "123";
+// 	char s5[] = "-98765";
 
-// 	printf("i1 in base10 = %d\n", ft_atoi_base(i1, base10));
-// 	printf("i2 in base10 = %d\n", ft_atoi_base(i2, base10));
-// 	printf("i3 in base10 = %d\n", ft_atoi_base(i3, base10));
-// 	printf("i4 in base10 = %d\n", ft_atoi_base(i4, base10));
-// 	printf("i5 in base10 = %d\n", ft_atoi_base(i5, base10));
-// 	printf("i6 in base10 = %d\n", ft_atoi_base(i6, base10));
-// 	printf("i7 in base10 = %d\n", ft_atoi_base(i7, base10));
-// 	printf("i8 in base10 = %d\n", ft_atoi_base(i8, base10));
-// 	printf("i9 in base10 = %d\n", ft_atoi_base(i9, base10));
+// 	printf("s1 in base10 = %d\n", ft_atoi_base(s1, base10));
+// 	printf("s1 = %d\n", atoi(s1));
+// 	printf("s2 in base10 = %d\n", ft_atoi_base(s2, base10));
+// 	printf("s2 = %d\n", atoi(s2));
+// 	printf("s3 in base10 = %d\n", ft_atoi_base(s3, base10));
+// 	printf("s3 = %d\n", atoi(s3));
+// 	printf("s4 in base10 = %d\n", ft_atoi_base(s4, base10));
+// 	printf("s4 = %d\n", atoi(s4));
+// 	printf("s5 in base10 = %d\n", ft_atoi_base(s5, base10));
+// 	printf("s5 = %d\n", atoi(s5));
 
-// 	char b1[] = "X"; 
-// 	char b2[] = "Y"; 
-// 	char b3[] = "YY";
-// 	char b4[] = "-YXX";
-// 	char b5[] = "YXYX";
+// 	char s6[] = "X"; 
+// 	char s7[] = "Y"; 
+// 	char s8[] = "YY";
+// 	char s9[] = "-YXX";
+// 	char s10[] = "YXYX";
 
-// 	printf("b1 in base2 = %d\n", ft_atoi_base(b1, base2));
-// 	printf("b2 in base2 = %d\n", ft_atoi_base(b2, base2));
-// 	printf("b3 in base2 = %d\n", ft_atoi_base(b3, base2));
-// 	printf("b4 in base2 = %d\n", ft_atoi_base(b4, base2));
-// 	printf("b5 in base2 = %d\n", ft_atoi_base(b5, base2));
+// 	printf("s6 in base2 (0)= %d\n", ft_atoi_base(s6, base2));
+// 	printf("s7 in base2 (1)= %d\n", ft_atoi_base(s7, base2));
+// 	printf("s8 in base2 (3)= %d\n", ft_atoi_base(s8, base2));
+// 	printf("s9 in base2 (4)= %d\n", ft_atoi_base(s9, base2));
+// 	printf("s10 in base2 (10)= %d\n", ft_atoi_base(s10, base2));
 
-// 	char s1[] = "arnaud"; 
-// 	char s2[] = "XYXYXXYYXYYXYYXYXYXYXY"; 
-// 	char s3[] = "    \n \f \r \t \v   ---++-+-abracadabra"; // -21
-// 	char s4[] = "--+-+--+--00075"; // -75
-// 	char s5[] = "    \n \f \r \t \v   --+-+--+-0sf9s5a"; // 92
-// 	char s6[] = "    \n \f \r \t \v   --+--2147483647"; // INT_MAX 2147483647
-// 	char s7[] = "    \n \f \r \t \v   --+-2147483648"; // INT_MIN -2147483648
+// 	char base26[] = "abcdefghijklmnopqrstuvwxyz";
+// 	char str1[] = "arnaud"; 
+// 	char str2[] = "XYXYXXYYXYYXYYXYXYXYXY"; 
+// 	char str3[] = "    \n \f \r \t \v   ---++-+-abaabaracadabra"; // -630
+// 	char str4[] = "--+-+--+--00075"; // -75
+// 	char str5[] = "    \n \f \r \t \v   --+-+--+-00092as5465as"; // 92
+// 	char str6[] = "    \n \f \r \t \v   --+- +--+-00092as5465as"; // 0
+// 	char str7[] = "    \n \f \r \t \v   --+--2147483647"; // INT_MAX 2147483647
+// 	char str8[] = "    \n \f \r \t \v   --+-2147483648"; // INT_MIN -2147483648
+// 	char str9[] = "    \n \f \r \t \v   --+--2147483648"; // INT_MAX+1 0
+// 	char str10[] = "    \n \f \r \t \v   --+-2147483649"; // INT_MIN-1 0
 
-// 	printf("s1 in base26 (7997603) = %d\n", ft_atoi_base(s1, base26));
-// 	printf("s2 in base2 (1366869) = %d\n", ft_atoi_base(s2, base2));
-// 	printf("s3 in base5 (3548795)= %d\n", ft_atoi_base(s3, base5));
-// 	printf("s4 in base_inv (3548795)= %d\n", ft_atoi_base(s4, base_inv));
-// 	printf("s5 in base36 (1718703550) = %d\n", ft_atoi_base(s5, base36));
-// 	printf("s6 in base10 = %d\n", ft_atoi_base(s6, base10));
-// 	printf("s7 in base10 = %d\n", ft_atoi_base(s7, base10));
-
+// 	printf("str1 in base26 (7997603) = %d\n", ft_atoi_base(str1, base26));
+// 	printf("str2 in base2 (1366869) = %d\n", ft_atoi_base(str2, base2));
+// 	printf("str3 in base5 (-630)= %d\n", ft_atoi_base(str3, base5));
+// 	printf("str4 in base10 = %d\n", ft_atoi_base(str4, base10));
+// 	printf("str5 in base10 = %d\n", ft_atoi_base(str5, base10));
+// 	printf("str6 in base10 = %d\n", ft_atoi_base(str6, base10));
+// 	printf("str7 in base10 = %d\n", ft_atoi_base(str7, base10));
+// 	printf("str8 in base10 = %d\n", ft_atoi_base(str8, base10));
+// 	printf("str9 in base10 = %d\n", ft_atoi_base(str9, base10));
+// 	printf("str10 in base10 = %d\n", ft_atoi_base(str10, base10));     
 // }
