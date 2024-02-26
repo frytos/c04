@@ -178,7 +178,6 @@ int	check_base_get_size(char *base)
 // 	printf("str9 in base10 = %d\n", ft_atoi_base(str9, base10));
 // 	printf("str10 in base10 = %d\n", ft_atoi_base(str10, base10));  
 
-
 // 	char base2ab[] = "abc";
 // 	char base10[] = "0123456789";
 // 	char base2[] = "XY";
