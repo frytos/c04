@@ -13,75 +13,56 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <limits.h>
+#include <stdlib.h>
 
+void	ft_recursive_print(long n, char *base, int len_base);
+int		check_base_get_size(char *base);
 void	ft_putnbr_base(int nbr, char *base);
-int		check_base_and_size(char *str);
-void	ft_putchar(char c);
-void	get_and_print_significand(long long_nbr, int base_number, char *base);
-char	convert_in_base(int significand, char *base);
 
 void	ft_putnbr_base(int nbr, char *base)
 {
-	int		base_number;
-	long	long_nbr;
+	long	nbr_long;
+	int		len_base;
 
-	long_nbr = nbr;
-	if (check_base_and_size(base) > 1)
-		base_number = check_base_and_size(base);
-	else
+	len_base = check_base_get_size(base);
+	if (len_base < 2)
 		return ;
-	if (long_nbr < 0)
+	nbr_long = nbr;
+	if (nbr_long < 0)
 	{
-		ft_putchar('-');
-		long_nbr = -long_nbr;
+		write(1, "-", 1);
+		nbr_long = -nbr_long;
 	}
-	get_and_print_significand(long_nbr, base_number, base);
+	ft_recursive_print(nbr_long, base, len_base);
 }
 
-void	get_and_print_significand(long long_nbr, int base_number, char *base)
+void	ft_recursive_print(long n, char *base, int len_base)
 {
-	if (long_nbr / base_number)
-	{
-		get_and_print_significand(long_nbr / base_number, base_number, base);
-		ft_putchar(convert_in_base(long_nbr % base_number, base));
-	}
-	else
-		ft_putchar(convert_in_base(long_nbr % base_number, base));
+	if (n / len_base > 0)
+		ft_recursive_print(n / len_base, base, len_base);
+	write(1, &base[n % len_base], 1);
 }
 
-char	convert_in_base(int significand, char *base)
+int	check_base_get_size(char *base)
 {
-	return (base[significand]);
-}
-
-int	check_base_and_size(char *str)
-{
-	int	len;
+	int	len_base;
 	int	search_index;
 
-	len = 0;
-	while (str[len] != 0)
+	len_base = 0;
+	while (base[len_base])
 	{
-		if (str[len] == 43 || str[len] == 45)
-			return (-3);
+		if (base[len_base] == '+' || base[len_base] == '-')
+			return (0);
 		search_index = 1;
-		while (str[len + search_index] != 0)
+		while (base[len_base + search_index])
 		{
-			if (str[len] == str[len + search_index])
-				return (-2);
-			search_index++;
+			if (base[len_base] == base[len_base + search_index])
+				return (0);
+			search_index ++;
 		}
-		len++;
+		len_base++;
 	}
-	if (len > 1)
-		return (len);
-	else
-		return (-1);
-}
-
-void	ft_putchar(char c)
-{
-	write(1, &c, 1);
+	return (len_base);
 }
 
 // int	main(void)
@@ -94,25 +75,31 @@ void	ft_putchar(char c)
 // 	char s6[] = "abcdefghijklmnopqrstuvwxyz";
 // 	char s7[] = "0123456789";
 
-// 	ft_putnbr_base(10, s1); ft_putchar(10);
-// 	ft_putnbr_base(96, s2); ft_putchar(10);
-// 	ft_putnbr_base(80, s3); ft_putchar(10);
-// 	ft_putnbr_base(80, s4); ft_putchar(10);
-// 	ft_putnbr_base(153, s5); ft_putchar(10);
-// 	ft_putnbr_base(-105893, s5); ft_putchar(10);
-// 	ft_putnbr_base(-2147483648, s6); ft_putchar(10);
-// 	ft_putnbr_base(2147483647, s6); ft_putchar(10);
-// 	ft_putnbr_base(0, s6); ft_putchar(10);
-// 	//ft_putnbr_base(-2147483649, s6); ft_putchar(10);
-// 	//ft_putnbr_base(2147483648, s6); ft_putchar(10);
+// 	ft_putnbr_base(10, s1); write(1, "\n", 1);
+// 	ft_putnbr_base(96, s2); write(1, "\n", 1);
+// 	ft_putnbr_base(80, s3); write(1, "\n", 1);
+// 	ft_putnbr_base(80, s4); write(1, "\n", 1);
+// 	ft_putnbr_base(153, s5); write(1, "\n", 1);
+// 	ft_putnbr_base(-105893, s5); write(1, "\n", 1);
+// 	ft_putnbr_base(-2147483648, s6); write(1, "\n", 1);
+// 	ft_putnbr_base(2147483647, s6); write(1, "\n", 1);
+// 	ft_putnbr_base(0, s6); write(1, "\n", 1);
+// 	//ft_putnbr_base(-2147483649, s6); write(1, "\n", 1);
+// 	//ft_putnbr_base(2147483648, s6); write(1, "\n", 1);
 
-// 	ft_putnbr_base(153, s7); ft_putchar(10);
-// 	ft_putnbr_base(-105893, s7); ft_putchar(10);
-// 	ft_putnbr_base(-2147483648, s7); ft_putchar(10);
-// 	ft_putnbr_base(2147483647, s7); ft_putchar(10);
-// 	ft_putnbr_base(0, s7); ft_putchar(10);
-// 	//ft_putnbr_base(-2147483649, s7); ft_putchar(10);
-// 	//ft_putnbr_base(2147483648, s7); ft_putchar(10);
+// 	ft_putnbr_base(153, s7); write(1, "\n", 1);
+// 	ft_putnbr_base(-105893, s7); write(1, "\n", 1);
+// 	ft_putnbr_base(-2147483648, s7); write(1, "\n", 1);
+// 	ft_putnbr_base(2147483647, s7); write(1, "\n", 1);
+// 	ft_putnbr_base(0, s7); write(1, "\n", 1);
+// 	//ft_putnbr_base(-2147483649, s7); write(1, "\n", 1);
+// 	//ft_putnbr_base(2147483648, s7); write(1, "\n", 1);
 
 // 	return (0);
+// }
+
+// int	main(int argc, char *argv[])
+// {
+// 	(void) argc;
+// 		ft_putnbr_base(atoi(argv[1]), argv[2]);
 // }
