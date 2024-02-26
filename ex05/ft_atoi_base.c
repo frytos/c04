@@ -176,5 +176,17 @@ int	check_base_get_size(char *base)
 // 	printf("str7 in base10 = %d\n", ft_atoi_base(str7, base10));
 // 	printf("str8 in base10 = %d\n", ft_atoi_base(str8, base10));
 // 	printf("str9 in base10 = %d\n", ft_atoi_base(str9, base10));
-// 	printf("str10 in base10 = %d\n", ft_atoi_base(str10, base10));     
+// 	printf("str10 in base10 = %d\n", ft_atoi_base(str10, base10));  
+
+
+// 	char base2ab[] = "abc";
+// 	char base10[] = "0123456789";
+// 	char base2[] = "XY";
+// 	char base5[] = "abcde";
+// 	char base26[] = "abcdefghijklmnopqrstuvwxyz";
+// 	printf("a in base2ab = %d\n", ft_atoi_base("aaaa", base2ab));
+// 	printf("0 in base10 = %d\n", ft_atoi_base("000", base10));
+// 	printf("X in base2 = %d\n", ft_atoi_base("XXX", base2));
+// 	printf("a in base5 = %d\n", ft_atoi_base("aaa", base5));
+// 	printf("a in base26 = %d\n", ft_atoi_base("aaa", base26));
 // }
